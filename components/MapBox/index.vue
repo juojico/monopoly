@@ -2,29 +2,35 @@
   <div
     class="mapBox"
     :style="'background-color: rgba(' + bgc + ');'"
-    @click="handleClick()"
+    @click="handleClick(data.price)"
   >
     <div class="mapBoxName">
       {{ data.name }}
     </div>
     <div class="mapBoxPrice">$ {{ data.price }}</div>
-    {{ level }}
+    <div class="mapBoxOwer">{{ ower ? ower + '擁有' : '尚未擁有者' }}</div>
+    Lv {{ level }}
   </div>
 </template>
 
 <script>
 export default {
   name: 'MapBox',
-  props: { data: Object, buy: Function },
+  props: { data: Object, buy: Function, currentPlayer: String },
   data() {
     return {
-      level: 1,
+      level: 0,
+      ower: '',
     };
   },
   methods: {
-    handleClick() {
-      this.buy();
-      this.level++;
+    handleClick(price) {
+      console.log(this.ower, this.currentPlayer);
+      if (this.ower === this.currentPlayer || this.ower === '') {
+        this.ower = this.currentPlayer;
+        this.buy(price);
+        this.level++;
+      }
     },
   },
   computed: {
