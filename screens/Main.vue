@@ -9,13 +9,28 @@
       {{ players[currentPlayer].money }}
     </h1>
     <div class="map">
-      <div v-for="(item, index) in places" :key="index">
-        <MapBox
-          :data="item"
-          :buy="handleBuy"
-          :currentPlayer="players[currentPlayer].name"
-        />
+      <div class="block"></div>
+      <div class="block">
+        <div v-for="(item, index) in places" :key="index">
+          <MapBox
+            :data="item"
+            :buy="handleBuy"
+            :currentPlayer="players[currentPlayer].name"
+          />
+        </div>
       </div>
+      <div class="block"></div>
+
+      <div class="block"></div>
+      <div class="block">
+        <BtnGo :onclick="rollDice" />
+        <div class="dice">{{ dice }}</div>
+      </div>
+      <div class="block"></div>
+
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
     </div>
 
     <div>
@@ -28,18 +43,21 @@
 
 <script>
 import MapBox from '../components/MapBox/';
+import BtnGo from '../components/Button/BtnGo';
 import { PLACES } from '../constants/map';
 
 export default {
   name: 'Main',
   components: {
     MapBox,
+    BtnGo,
   },
   data() {
     return {
       places: PLACES,
       currentPlayer: 0,
       yourName: '',
+      dice: 1,
       players: [
         { name: 'Doris', money: 10000, color: '#f8c' },
         { name: 'Emma', money: 8000, color: '#39a' },
@@ -59,16 +77,25 @@ export default {
         this.currentPlayer = 0;
       }
     },
+    rollDice() {
+      return (this.dice = Math.round(Math.random() * 5) + 1);
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss">
 .map {
   width: 800px;
-  height: 500px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  height: 800px;
+  display: grid;
+  grid-template-columns: auto 50% auto;
+  background-color: #eee;
+
+  .block {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
 }
 </style>

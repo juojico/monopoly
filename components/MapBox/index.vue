@@ -1,7 +1,7 @@
 <template>
   <div
     class="mapBox"
-    :style="'background-color: rgba(' + bgc + ');'"
+    :style="'border-color: rgba(' + bgc + ');'"
     @click="handleClick(data.price)"
   >
     <div class="mapBoxName">
@@ -48,8 +48,11 @@ export default {
   width: 150px;
   height: 150px;
   padding: 10px;
-  background-color: #369;
-  color: white;
+  background-color: #fefefe;
+  border: 10px solid #333;
+  border-top-width: 50px;
+  color: #333;
+  outline: 4px solid #333;
   cursor: pointer;
   user-select: none;
   &Name {
