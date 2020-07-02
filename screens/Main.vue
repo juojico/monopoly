@@ -23,8 +23,11 @@
 
       <div class="block"></div>
       <div class="block">
-        <BtnGo :onclick="rollDice" />
-        <div class="dice">{{ dice }}</div>
+        <div class="playBlock">
+          <Dice :value="dice" />
+          <BtnGo :onclick="rollDice" />
+          <div>{{ dice }}</div>
+        </div>
       </div>
       <div class="block"></div>
 
@@ -44,6 +47,7 @@
 <script>
 import MapBox from '../components/MapBox/';
 import BtnGo from '../components/Button/BtnGo';
+import Dice from '../components/Dice';
 import { PLACES } from '../constants/map';
 
 export default {
@@ -51,6 +55,7 @@ export default {
   components: {
     MapBox,
     BtnGo,
+    Dice,
   },
   data() {
     return {
@@ -97,5 +102,12 @@ export default {
     justify-content: center;
     align-items: stretch;
   }
+}
+
+.playBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
 }
 </style>
