@@ -1,11 +1,11 @@
 <template>
-  <div class="btnGo" @click="onclick">GO!</div>
+  <div :class="disabled ? 'btnGo disabled' : 'btnGo'" @click="onclick">GO!</div>
 </template>
 
 <script>
 export default {
   name: 'BtnGo',
-  props: { onclick: Function },
+  props: { onclick: Function, disabled: Boolean },
 };
 </script>
 
@@ -21,7 +21,15 @@ export default {
   line-height: 100px;
   text-align: center;
   box-shadow: 0 6px #672012, 0 6px 10px rgba(0, 0, 0, 0.2);
+  transition: 0.1s;
   cursor: pointer;
   user-select: none;
+
+  &.disabled {
+    margin-top: 2px;
+    background-color: #a03f3f;
+    box-shadow: 0 4px #672012, 0 4px 10px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+  }
 }
 </style>

@@ -24,9 +24,9 @@
       <div class="block"></div>
       <div class="block">
         <div class="playBlock">
-          <Dice :value="dice" />
-          <BtnGo :onclick="rollDice" />
-          <div>{{ dice }}</div>
+          <Dice :value="diceValue" :rolled="rolled" />
+          <BtnGo :onclick="rollDice" :disabled="btnGoOff" />
+          <div>{{ diceValue }}</div>
         </div>
       </div>
       <div class="block"></div>
@@ -62,7 +62,9 @@ export default {
       places: PLACES,
       currentPlayer: 0,
       yourName: '',
-      dice: 1,
+      diceValue: 1,
+      rolled: 0,
+      btnGoOff: false,
       players: [
         { name: 'Doris', money: 10000, color: '#f8c' },
         { name: 'Emma', money: 8000, color: '#39a' },
@@ -83,7 +85,12 @@ export default {
       }
     },
     rollDice() {
-      return (this.dice = Math.round(Math.random() * 5) + 1);
+      this.rolled++;
+      this.btnGoOff = true;
+      setTimeout(() => {
+        this.btnGoOff = false;
+      }, 1000);
+      return (this.diceValue = Math.round(Math.random() * 5) + 1);
     },
   },
 };
@@ -105,6 +112,7 @@ export default {
 }
 
 .playBlock {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;

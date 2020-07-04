@@ -1,22 +1,12 @@
 <template>
-  <div class="dice">
-    <div :class="'diceFace dice1 ' + diceFaces[0]">
-      1
-    </div>
-    <div :class="'diceFace dice2 ' + diceFaces[1]">
-      2
-    </div>
-    <div :class="'diceFace dice3 ' + diceFaces[2]">
-      3
-    </div>
-    <div :class="'diceFace dice4 ' + diceFaces[3]">
-      4
-    </div>
-    <div :class="'diceFace dice5 ' + diceFaces[4]">
-      5
-    </div>
-    <div :class="'diceFace dice6 ' + diceFaces[5]">
-      6
+  <div class="diceWrap">
+    <div :class="diceClass">
+      <div class="diceFace front"></div>
+      <div class="diceFace up"></div>
+      <div class="diceFace left"></div>
+      <div class="diceFace right"></div>
+      <div class="diceFace bottom"></div>
+      <div class="diceFace back"></div>
     </div>
   </div>
 </template>
@@ -24,83 +14,269 @@
 <script>
 export default {
   name: 'Dice',
-  props: { value: Number },
+  props: { value: Number, rolled: Number },
   data() {
     return {
-      diceFaces: ['front', 'up', 'left', 'right', 'bottom', 'back'],
+      diceClass: 'dice',
     };
   },
+  methods: {
+    onRolls() {
+      this.onRoll();
+      console.log('onRoll');
+    },
+  },
   watch: {
-    value: function () {
-      console.log('this.diceFaces', this.diceFaces);
-      return this.diceFaces.sort(() => 0.5 - Math.random());
+    rolled: function () {
+      this.diceClass = 'dice throw value' + this.value;
+      setTimeout(() => {
+        this.diceClass = 'dice value' + this.value;
+      }, 1000);
     },
   },
 };
 </script>
 
 <style lang="scss">
+$diceBg: #f6f3f0;
+$diceColor1: #f63330 !default;
+$diceColor2: #131210 !default;
+$diceRadius: 20px !default;
+
+$redDice: false !default;
+$blueDice: false !default;
+$blackDice: false !default;
+$pinkDice: false !default;
+
+@if $redDice {
+  $diceBg: rgba(250, 0, 0, 0.45);
+  $diceColor1: white;
+  $diceColor2: white;
+  $diceRadius: 30px;
+}
+
+@if $blueDice {
+  $diceBg: rgba(0, 0, 255, 0.45);
+  $diceColor1: white;
+  $diceColor2: white;
+}
+
+@if $blackDice {
+  $diceBg: #111;
+  $diceColor1: #3ef;
+  $diceColor2: #db0;
+}
+
+@if $pinkDice {
+  $diceBg: #f69;
+  $diceColor1: #fe9;
+  $diceColor2: #ffe;
+  $diceRadius: 40px;
+}
+
 @keyframes rotateDice {
-  0% {
-    perspective-origin: 100%;
-  }
-  50% {
-    perspective-origin: -100%;
+  30% {
+    transform: rotate3d(1, 1, 1, 0deg);
   }
   100% {
-    transform: rotate(360deg);
-    perspective-origin: 100%;
+    transform: rotate3d(1, 1, 1, 720deg);
+  }
+}
+
+@keyframes rotatePerFace {
+  16% {
+    transform: rotate3d(-0.1, 0.6, -0.4, 180deg);
+  }
+  32% {
+    transform: rotate3d(-0.85, -0.42, 0.73, 180deg);
+  }
+  48% {
+    transform: rotate3d(-0.8, 0.3, -0.75, 180deg);
+  }
+  64% {
+    transform: rotate3d(0.3, 0.45, 0.9, 180deg);
+  }
+  80% {
+    transform: rotate3d(-0.16, 0.6, 0.18, 180deg);
+  }
+  100% {
+    transform: rotate3d(-0.1, 0.3, -1, 180deg);
+  }
+}
+
+@keyframes throwDice {
+  20% {
+    margin-top: -100px;
+  }
+  40% {
+    margin-top: 0px;
+  }
+  60% {
+    margin-top: -30px;
+  }
+  80% {
+    margin-top: 0px;
+  }
+  85% {
+    margin-top: -10px;
+  }
+  90% {
+    margin-top: 0px;
+  }
+  95% {
+    margin-top: -3px;
+  }
+  100% {
+    margin-top: 0px;
+  }
+}
+
+.diceWrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::before {
+    position: absolute;
+    content: '';
+    width: 70%;
+    height: 70%;
+    top: 40%;
+    left: 10%;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 100%;
+    filter: blur(10px);
   }
 }
 
 .dice {
-  position: relative;
   width: 100px;
   height: 100px;
-  perspective: 500px;
-  perspective-origin: -100% -100%;
-//   animation: rotateDice 2s infinite linear;
+  transform-style: preserve-3d;
+  transform: rotate3d(0, 0.9, 0.9, 90deg);
+  transition: 0.5s cubic-bezier(0.42, 1.57, 0.62, 0.86);
+
+  &.rolling {
+    animation: rotatePerFace 3s cubic-bezier(0.42, 1.57, 0.62, 0.86) infinite;
+  }
+
+  &.throw {
+    animation: rotateDice 0.7s ease-in reverse, throwDice 1s linear;
+  }
+
+  &.value1 {
+    transform: rotate3d(-0.1, 0.3, -1, 180deg);
+  }
+
+  &.value2 {
+    transform: rotate3d(-0.1, 0.6, -0.4, 180deg);
+  }
+
+  &.value3 {
+    transform: rotate3d(-0.85, -0.42, 0.73, 180deg);
+  }
+
+  &.value4 {
+    transform: rotate3d(-0.8, 0.3, -0.75, 180deg);
+  }
+
+  &.value5 {
+    transform: rotate3d(0.3, 0.45, 0.9, 180deg);
+  }
+
+  &.value6 {
+    transform: rotate3d(-0.16, 0.6, 0.18, 180deg);
+  }
 
   &Face {
+    box-sizing: border-box;
     position: absolute;
     width: 100px;
     height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fefefe;
-    border-radius: 12px;
-    font-size: 40px;
-    transition: 1s;
+    background-color: $diceBg;
+    border: 2px solid lighten($diceBg, 10%);
+    border-radius: $diceRadius;
+    transform-style: preserve-3d;
+
+    &::before {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 100%;
+      background-color: lighten($diceBg, 10%);
+      border-radius: 20px;
+      transform: translateZ(-1px);
+    }
+
+    &::after {
+      position: absolute;
+      content: '';
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin: -10px 0 0 -10px;
+      background-color: $diceColor2;
+      border-radius: 100%;
+      transform: translateZ(1px);
+    }
   }
 
   .front {
     transform: translateZ(50px);
-    background-color: #f9f9f9;
-    z-index: 6;
+    &::after {
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      background-color: $diceColor1;
+    }
   }
-  .back {
-    transform: translateZ(-50px);
-    z-index: 1;
-  }
+
   .up {
     transform: rotateX(90deg) translateZ(50px);
-    z-index: 4;
+    &::after {
+      margin: -30px 0 0 -30px;
+      box-shadow: 40px 40px $diceColor2;
+    }
   }
-  .bottom {
-    transform: rotateX(-90deg) translateZ(50px);
-    background-color: #eee;
-    z-index: 2;
-  }
-  .right {
-    transform: rotateY(90deg) translateZ(50px);
-    background-color: #f3f3f3;
-    z-index: 3;
-  }
+
   .left {
     transform: rotateY(-90deg) translateZ(50px);
-    background-color: #f3f3f3;
-    z-index: 3;
+    &::after {
+      margin: -40px 0 0 -40px;
+      box-shadow: 30px 30px $diceColor2, 60px 60px $diceColor2;
+    }
+  }
+
+  .right {
+    transform: rotateY(90deg) translateZ(50px);
+    &::after {
+      margin: -30px 0 0 -30px;
+      background-color: $diceColor1;
+      box-shadow: 40px 0px $diceColor1, 0px 40px $diceColor1,
+        40px 40px $diceColor1;
+    }
+  }
+
+  .bottom {
+    transform: rotateX(-90deg) translateZ(50px);
+    &::after {
+      margin: -36px 0 0 -36px;
+      box-shadow: 26px 26px $diceColor2, 52px 52px $diceColor2,
+        52px 0px $diceColor2, 0px 52px $diceColor2;
+    }
+  }
+
+  .back {
+    transform: rotateX(180deg) translateZ(50px);
+    &::after {
+      margin: -40px 0 0 -30px;
+      box-shadow: 40px 0px $diceColor2, 0px 30px $diceColor2,
+        40px 30px $diceColor2, 0px 60px $diceColor2, 40px 60px $diceColor2;
+    }
   }
 }
 </style>
