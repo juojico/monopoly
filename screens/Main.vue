@@ -11,17 +11,26 @@
     <div class="map">
       <div class="block"></div>
       <div class="block">
-        <div v-for="(item, index) in places" :key="index">
-          <MapBox
-            :data="item"
-            :buy="handleBuy"
-            :currentPlayer="players[currentPlayer].name"
-          />
-        </div>
+        <MapBox
+          v-for="(item, index) in places.taiwan"
+          :key="index"
+          :data="item"
+          :buy="handleBuy"
+          :currentPlayer="players[currentPlayer].name"
+        />
       </div>
       <div class="block"></div>
 
-      <div class="block"></div>
+      <div class="block vertical">
+        <MapBox
+          v-for="(item, index) in places.usa"
+          :key="index"
+          :data="item"
+          :buy="handleBuy"
+          :currentPlayer="players[currentPlayer].name"
+          position="left"
+        />
+      </div>
       <div class="block">
         <div class="playBlock">
           <Dice :value="diceValue" :rolled="rolled" />
@@ -29,10 +38,27 @@
           <div>{{ diceValue }}</div>
         </div>
       </div>
-      <div class="block"></div>
+      <div class="block vertical">
+        <MapBox
+          v-for="(item, index) in places.japan"
+          :key="index"
+          :data="item"
+          :buy="handleBuy"
+          :currentPlayer="players[currentPlayer].name"
+          position="right"
+        />
+      </div>
 
       <div class="block"></div>
-      <div class="block"></div>
+      <div class="block">
+        <MapBox
+          v-for="(item, index) in places.seasia"
+          :key="index"
+          :data="item"
+          :buy="handleBuy"
+          :currentPlayer="players[currentPlayer].name"
+        />
+      </div>
       <div class="block"></div>
     </div>
 
@@ -98,8 +124,6 @@ export default {
 
 <style lang="scss">
 .map {
-  width: 800px;
-  height: 800px;
   display: grid;
   grid-template-columns: auto 50% auto;
   background-color: #eee;
@@ -108,6 +132,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: stretch;
+
+    &.vertical {
+      flex-direction: column;
+    }
   }
 }
 

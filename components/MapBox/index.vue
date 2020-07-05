@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mapBox"
+    :class="'mapBox ' + position||''"
     :style="'border-color: rgba(' + bgc + ');'"
     @click="handleClick(data.price)"
   >
@@ -16,7 +16,12 @@
 <script>
 export default {
   name: 'MapBox',
-  props: { data: Object, buy: Function, currentPlayer: String },
+  props: {
+    data: Object,
+    buy: Function,
+    currentPlayer: String,
+    position: String,
+  },
   data() {
     return {
       level: 0,
@@ -45,7 +50,7 @@ export default {
 
 <style lang="scss">
 .mapBox {
-  width: 150px;
+  min-width: 150px;
   height: 150px;
   padding: 10px;
   background-color: #fefefe;
@@ -55,6 +60,19 @@ export default {
   outline: 4px solid #333;
   cursor: pointer;
   user-select: none;
+
+  &.left {
+    height: 100px;
+    border-top-width: 10px;
+    border-left-width: 50px;
+  }
+
+  &.right {
+    height: 100px;
+    border-top-width: 10px;
+    border-right-width: 50px;
+  }
+
   &Name {
     font-size: 24px;
   }
