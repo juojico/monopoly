@@ -62,6 +62,8 @@
       <div class="block"></div>
     </div>
 
+    <Chess :style="'left: ' + diceValue * 10 + '%'" />
+
     <div>
       <div v-for="(item, index) in players" :key="index">
         {{ item.name + item.money }}
@@ -74,6 +76,7 @@
 import MapBox from '../components/MapBox/';
 import BtnGo from '../components/Button/BtnGo';
 import Dice from '../components/Dice';
+import Chess from '../components/Characters/Chess';
 import { PLACES } from '../constants/map';
 
 export default {
@@ -82,6 +85,7 @@ export default {
     MapBox,
     BtnGo,
     Dice,
+    Chess,
   },
   data() {
     return {
@@ -116,7 +120,8 @@ export default {
       setTimeout(() => {
         this.btnGoOff = false;
       }, 1000);
-      return (this.diceValue = Math.round(Math.random() * 5) + 1);
+      const diceVal = Math.round(Math.random() * 5) + 1;
+      this.diceValue = diceVal;
     },
   },
 };
@@ -125,7 +130,7 @@ export default {
 <style lang="scss">
 .map {
   display: grid;
-  grid-template-columns: auto 50% auto;
+  grid-template-columns: auto auto auto;
   background-color: #eee;
 
   .block {

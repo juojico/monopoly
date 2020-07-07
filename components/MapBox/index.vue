@@ -50,8 +50,9 @@ export default {
 
 <style lang="scss">
 .mapBox {
-  min-width: 150px;
-  height: 150px;
+  flex: 1;
+  min-width: 50px;
+  min-height: 50px;
   padding: 10px;
   background-color: #fefefe;
   border: 10px solid #333;
@@ -62,13 +63,11 @@ export default {
   user-select: none;
 
   &.left {
-    height: 100px;
     border-top-width: 10px;
     border-left-width: 50px;
   }
 
   &.right {
-    height: 100px;
     border-top-width: 10px;
     border-right-width: 50px;
   }
